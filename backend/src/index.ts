@@ -20,6 +20,14 @@ app.use(
 );
 app.use(rateLimiter);
 
+app.get('/status', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
+app.use((req, res) => {
+  res.status(404).json({ message: 'Not Found' });
+});
+
 app.listen(PORT, () => {
   console.log(`Server started on ${PORT} port`);
 });
