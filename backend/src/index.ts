@@ -3,6 +3,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import { rateLimiter } from './middleware/rate-limiter.js';
 import { config } from './config.js';
+import { githubClient } from './lib/github-client.js';
 
 const app = express();
 
@@ -17,6 +18,17 @@ app.use(rateLimiter);
 
 app.get('/status', (req, res) => {
   res.status(200).json({ status: 'ok' });
+});
+
+app.get('/users', async (req, res) => {
+  const username = req.query.username;
+
+  if (!username) {
+    return res.status(400).json({ message: 'Username is required' });
+  }
+
+  const response = await githubClient.get(`/users/${username}`);
+  res.status(200).json(response);
 });
 
 app.use((req, res) => {
