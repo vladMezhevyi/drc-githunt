@@ -3,6 +3,7 @@ import { HttpException } from '../common/http-exception.js';
 import { logger } from '../common/logger.js';
 import { ZodError } from 'zod';
 import { HttpStatusCode } from '../common/http-status-code.js';
+import { RequestError } from '@octokit/request-error';
 
 export const errorHandler = (
   error: unknown,
@@ -35,6 +36,13 @@ export const errorHandler = (
       message: 'Validation failed',
       errors: error.issues,
     });
+
+    return;
+  }
+
+  if (error instanceof RequestError) {
+    logger.warn({ error }, 'GitHub API error');
+    res.status(error.status).json({ message: 'Something went wrong' });
 
     return;
   }
