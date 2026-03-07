@@ -1,4 +1,5 @@
 import type { Endpoints } from '@octokit/types';
+import type { DeepCamelCase } from '../../utils/case-transform/case-transform.types.js';
 import z from 'zod';
 
 export const SearchRepositoriesQueryParamsSchema = z.object({
@@ -11,4 +12,6 @@ export const SearchRepositoriesQueryParamsSchema = z.object({
 
 export type SearchRepositoriesQueryParams = z.infer<typeof SearchRepositoriesQueryParamsSchema>;
 
-export type SearchRepositoriesResponse = Endpoints['GET /search/repositories']['response']['data'];
+export type SearchRepositoriesResponse = DeepCamelCase<
+  Endpoints['GET /search/repositories']['response']['data']
+>;
