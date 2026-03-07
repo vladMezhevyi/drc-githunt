@@ -4,6 +4,8 @@ import cors from 'cors';
 import { rateLimiter } from './middleware/rate-limiter.js';
 import { githubClient } from './lib/github-client.js';
 import { env } from './common/env.js';
+import { logger } from './middleware/logger.js';
+import { errorHandler } from './middleware/error-handler.js';
 
 const app = express();
 
@@ -35,6 +37,8 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Not Found' });
 });
 
+app.use(errorHandler);
+
 app.listen(env.PORT, () => {
-  console.log(`Server started on ${env.PORT} port`);
+  logger.info(`Server started on ${env.PORT} port`);
 });
