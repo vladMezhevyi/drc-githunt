@@ -1,5 +1,5 @@
 import { env } from './common/env.js';
-import { logger } from './middleware/logger.js';
+import { logger } from './common/logger.js';
 import { app } from './server.js';
 
 const { PORT, NODE_ENV } = env;

@@ -2,7 +2,7 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import { rateLimiter } from './middleware/rate-limiter.js';
-import { githubClient } from './lib/github-client.js';
+import { githubClient } from './lib/github/github-client.js';
 import { env } from './common/env.js';
 import { errorHandler } from './middleware/error-handler.js';
 import { requestLogger } from './middleware/request-logger.js';

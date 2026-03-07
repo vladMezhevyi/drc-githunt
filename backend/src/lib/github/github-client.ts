@@ -1,4 +1,4 @@
-import { env } from '../common/env.js';
+import { env } from '../../common/env.js';
 
 export interface GithubClientOptions {
   params?: Record<string, string>;
