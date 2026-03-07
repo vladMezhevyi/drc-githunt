@@ -1,5 +1,4 @@
-import { octokit } from '../../lib/github/github-client.js';
-import { deepCamelCase, deepSnakeCase } from '../../utils/case-transform/case-transform.js';
+import { githubRequest } from '../../lib/github/github-request.js';
 import type {
   SearchRepositoriesQueryParams,
   SearchRepositoriesResponse,
@@ -11,17 +10,13 @@ class SearchService {
   async searchRepositories(
     queryParams: SearchRepositoriesQueryParams,
   ): Promise<SearchRepositoriesResponse> {
-    const params = deepSnakeCase(queryParams);
-    const response = await octokit.request('GET /search/repositories', params);
-
-    return deepCamelCase(response.data);
+    const response = await githubRequest('GET /search/repositories', queryParams);
+    return response.data;
   }
 
   async searchUsers(queryParams: SearchUsersQueryParams): Promise<SearchUsersResponse> {
-    const params = deepSnakeCase(queryParams);
-    const response = await octokit.request('GET /search/users', params);
-
-    return deepCamelCase(response.data);
+    const response = await githubRequest('GET /search/users', queryParams);
+    return response.data;
   }
 }
 
