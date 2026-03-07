@@ -13,4 +13,13 @@ export default defineConfig([
   },
   tseslint.configs.recommended,
   prettier,
+  {
+    rules: {
+      '@typescript-eslint/explicit-function-return-type': 'error',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/consistent-type-imports': 'error',
+      'no-console': 'warn',
+    },
+  },
 ]);
