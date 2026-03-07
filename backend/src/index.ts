@@ -1,44 +1,28 @@
-import express from 'express';
-import helmet from 'helmet';
-import cors from 'cors';
-import { rateLimiter } from './middleware/rate-limiter.js';
-import { githubClient } from './lib/github-client.js';
 import { env } from './common/env.js';
 import { logger } from './middleware/logger.js';
-import { errorHandler } from './middleware/error-handler.js';
+import { app } from './server.js';
 
-const app = express();
+const { PORT, NODE_ENV } = env;
 
-app.use(helmet());
-app.use(
-  cors({
-    origin: env.CLIENT_URL,
-    methods: 'GET',
-  }),
-);
-app.use(rateLimiter);
-
-app.get('/status', (req, res) => {
-  res.status(200).json({ status: 'ok' });
+const server = app.listen(PORT, () => {
+  logger.info(`Server (${NODE_ENV}) started on ${PORT} port`);
 });
 
-app.get('/users', async (req, res) => {
-  const username = req.query.username;
+const onCloseSignal = (): void => {
+  logger.info('SIGTERM received, shutting down gracefully');
 
-  if (!username) {
-    return res.status(400).json({ message: 'Username is required' });
-  }
+  // Stop accepting incoming requests. Existing in-flight requests are allowed to finish
+  server.close(() => {
+    logger.info('Server closed');
+    process.exit(0); // Success
+  });
 
-  const response = await githubClient.get(`/users/${username}`);
-  res.status(200).json(response);
-});
+  // Force shutdown after 30s if requests are still hanging
+  setTimeout(() => {
+    logger.error('Forcing shutdown after timeout');
+    process.exit(1); // Error due to forced shutdown
+  }, 30_000).unref();
+};
 
-app.use((req, res) => {
-  res.status(404).json({ message: 'Not Found' });
-});
-
-app.use(errorHandler);
-
-app.listen(env.PORT, () => {
-  logger.info(`Server started on ${env.PORT} port`);
-});
+process.on('SIGTERM', onCloseSignal);
+process.on('SIGINT', onCloseSignal);
