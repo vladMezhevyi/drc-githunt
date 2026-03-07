@@ -6,6 +6,7 @@ import { githubClient } from './lib/github-client.js';
 import { env } from './common/env.js';
 import { logger } from './middleware/logger.js';
 import { errorHandler } from './middleware/error-handler.js';
+import { requestLogger } from './middleware/request-logger.js';
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.use(
   }),
 );
 app.use(rateLimiter);
+
+app.use(requestLogger);
 
 app.get('/status', (req, res) => {
   res.status(200).json({ status: 'ok' });
