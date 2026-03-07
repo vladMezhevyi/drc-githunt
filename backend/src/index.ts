@@ -2,15 +2,15 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import { rateLimiter } from './middleware/rate-limiter.js';
-import { config } from './config.js';
 import { githubClient } from './lib/github-client.js';
+import { env } from './common/env.js';
 
 const app = express();
 
 app.use(helmet());
 app.use(
   cors({
-    origin: config.CLIENT_URL,
+    origin: env.CLIENT_URL,
     methods: 'GET',
   }),
 );
@@ -35,6 +35,6 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Not Found' });
 });
 
-app.listen(config.PORT, () => {
-  console.log(`Server started on ${config.PORT} port`);
+app.listen(env.PORT, () => {
+  console.log(`Server started on ${env.PORT} port`);
 });

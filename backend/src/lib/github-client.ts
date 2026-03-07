@@ -1,4 +1,4 @@
-import { config } from '../config.js';
+import { env } from '../common/env.js';
 
 export interface GithubClientOptions {
   params?: Record<string, string>;
@@ -6,8 +6,8 @@ export interface GithubClientOptions {
 }
 
 class GithubClient {
-  private readonly token: string = config.GITHUB_TOKEN;
-  private readonly apiUrl: string = config.GITHUB_API_URL;
+  private readonly token: string = env.GITHUB_TOKEN;
+  private readonly apiUrl: string = env.GITHUB_API_URL;
 
   private readonly requiredHeaders: RequestInit['headers'] = {
     Authorization: `Bearer ${this.token}`,
