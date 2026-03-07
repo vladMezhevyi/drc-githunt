@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 import { HttpException } from '../common/http-exception.js';
-import { logger } from './logger.js';
+import { logger } from '../common/logger.js';
 import { ZodError } from 'zod';
 import { HttpStatusCode } from '../common/http-status-code.js';
 
