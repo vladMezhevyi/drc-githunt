@@ -5,6 +5,7 @@ import { rateLimiter } from './middleware/rate-limiter.js';
 import { env } from './common/env.js';
 import { errorHandler } from './middleware/error-handler.js';
 import { requestLogger } from './middleware/request-logger.js';
+import { router } from './routes.js';
 
 export const app = express();
 
@@ -18,9 +19,7 @@ app.use(
 app.use(requestLogger);
 app.use(rateLimiter);
 
-app.get('/status', (req, res) => {
-  res.status(200).json({ status: 'ok' });
-});
+app.use('/api', router);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not Found' });
